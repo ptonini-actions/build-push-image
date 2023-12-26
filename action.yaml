@@ -1,0 +1,51 @@
+name: build-push-image
+description: ''
+inputs:
+  repository:
+    description: ''
+    required: true
+  tags:
+    description: ''
+    required: true
+  context:
+    description: ''
+    required: true
+  build-args:
+    description: ''
+    required: false
+    default: buildx
+  cache_key_suffix:
+    description: ''
+    required: false
+    default: buildx
+  cache_src:
+    description: ''
+    required: false
+    default: /tmp/cache
+  cache_dest:
+    description: ''
+    required: false
+    default: /tmp/cache
+runs:
+  using: composite
+  steps:
+    # Load cache directory ####################################################
+    - uses: actions/cache@v3
+      with:
+        path: ${{ inputs.cache_src }}
+        key: ${{ inputs.repository }}-${{ inputs.cache_key_suffix }}
+
+    # Build and push image ####################################################
+    - uses: docker/build-push-action@v3
+      id: build
+      with:
+        push: true
+        tags: ${{ inputs.tags }}
+        cache-from: type=local,src=${{ inputs.cache_src }}
+        cache-to: type=local,mode=max,dest=${{ inputs.cache_dest }}
+        build-args: ${{ inputs.build-args }}
+        context: ${{ ${{ inputs.context }}
+
+    # Update cache ############################################################
+    - run: rm -rf ${{ inputs.cache_src }} && mv ${{ inputs.cache_dest }} ${{ inputs.cache_src }}
+      shell: bash
