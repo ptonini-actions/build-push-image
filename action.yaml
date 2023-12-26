@@ -25,7 +25,7 @@ inputs:
   cache_dest:
     description: ''
     required: false
-    default: /tmp/cache
+    default: /tmp/cache_new
 outputs:
   digest:
     description: ''
@@ -51,5 +51,7 @@ runs:
         context: ${{ inputs.context }}
 
     # Update cache ############################################################
-    - run: rm -rf ${{ inputs.cache_src }} && mv ${{ inputs.cache_dest }} ${{ inputs.cache_src }}
+    - run: | 
+        rm -rf ${{ inputs.cache_src }} || true 
+        mv ${{ inputs.cache_dest }} ${{ inputs.cache_src }}
       shell: bash
