@@ -26,6 +26,10 @@ inputs:
     description: ''
     required: false
     default: /tmp/cache
+outputs:
+  digest:
+    description: ''
+    value: ${{ steps.build-push.outputs.digest }}
 runs:
   using: composite
   steps:
@@ -37,7 +41,7 @@ runs:
 
     # Build and push image ####################################################
     - uses: docker/build-push-action@v3
-      id: build
+      id: build-push
       with:
         push: true
         tags: ${{ inputs.tags }}
