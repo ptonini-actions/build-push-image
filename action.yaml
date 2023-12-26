@@ -48,7 +48,7 @@ runs:
         cache-from: type=local,src=${{ inputs.cache_src }}
         cache-to: type=local,mode=max,dest=${{ inputs.cache_dest }}
         build-args: ${{ inputs.build-args }}
-        context: ${{ ${{ inputs.context }}
+        context: ${{ inputs.context }}
 
     # Update cache ############################################################
     - run: rm -rf ${{ inputs.cache_src }} && mv ${{ inputs.cache_dest }} ${{ inputs.cache_src }}
